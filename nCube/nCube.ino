@@ -183,7 +183,7 @@ void pedometerGenProcess() {
     pedometer_y = RAD_TO_DEG * (atan2(-pedometer_x_ang, -pedometer_z_ang) + PI);
     pedometer_z = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_x_ang) + PI);
 
-    if (abs((pedometer_old_x - pedometer_x)) > 10 && abs((pedometer_old_y - pedometer_x)) > 10 && abs((pedometer_old_z - pedometer_x)) > 10)
+    if (abs((pedometer_old_x - pedometer_x)) > 10 && abs((pedometer_old_y - pedometer_y)) > 10 && abs((pedometer_old_z - pedometer_z)) > 10)
     {
         pedometer_moved = true;
     }
@@ -217,7 +217,7 @@ void pedometerGenProcess() {
             char rqi[10];
             rand_str(rqi, 8);
             upload_q.ref[upload_q.push_idx] = "/"+CB_NAME+"/"+AE_NAME+"/"+cnt;
-            upload_q.con[upload_q.push_idx] = String(pedometer_count / 2);
+            upload_q.con[upload_q.push_idx] = String(pedometer_count);
             upload_q.rqi[upload_q.push_idx] = String(rqi);
             upload_q.push_idx++;
             if(upload_q.push_idx >= QUEUE_SIZE)
