@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <SPI.h>
 
-/**
+/*
 Copyright (c) 2018, OCEAN
 All rights reserved.
 Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
@@ -14,6 +14,7 @@ THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR IMPLIED WAR
 #include <WiFi101.h>
 #include <WiFiMDNSResponder.h>
 
+#include <TinyGPS.h>
 #include <Servo.h>
 
 #include "OneM2MClient.h"
@@ -112,12 +113,21 @@ unsigned long system_watchdog = 0;
 // User Define
 // Period of Sensor Data, can make more
 const unsigned long base_generate_interval = 10 * 1000;
-
-// pedometer configuration
+unsigned long latitude_generate_previousMillis = 0;
+unsigned long latitude_generate_interval = base_generate_interval;
+unsigned long longitude_generate_previousMillis = 0;
+unsigned long longitude_generate_interval = base_generate_interval;
 unsigned long pedometer_generate_previousMillis = 0;
-unsigned long pedometer_generate_currentMillis = 0;
 unsigned long pedometer_generate_interval = base_generate_interval;
 
+// gps configuration
+TinyGPS gps;
+void getgps(TinyGPS &gps);
+
+float latitude = 0;
+float longitude = 0;
+
+// pedometer configuration
 const int pedometer_x_pin = 0;
 const int pedometer_y_pin = 1;
 const int pedometer_z_pin = 2;
@@ -125,14 +135,13 @@ const int pedometer_z_pin = 2;
 int pedometer_min_val = 265;
 int pedometer_max_val = 402;
 
-double pedometer_x;
-double pedometer_y;
-double pedometer_z;
+int pedometer_old_x = 0;
+int pedometer_old_y = 0;
+int pedometer_old_z = 0;
 
-int pedometer_old_x = 0, pedometer_old_y = 0, pedometer_old_z = 0;
 boolean pedometer_moved = false;
 
-unsigned long pedometer_last_millis = 0;
+unsigned long pedometer_last_count_millis = 0;
 unsigned long pedometer_count = 0;
 
 // lock configuration
@@ -141,7 +150,7 @@ int lock_pos = 0; // variable to store the servo position
 
 // Information of CSE as Mobius with MQTT
 const String FIRMWARE_VERSION = "1.0.0.0";
-String AE_NAME = "testabc";
+String AE_NAME = "testkkk";
 String AE_ID = "S" + AE_NAME;
 const String CSE_ID = "/Mobius2";
 const String CB_NAME = "Mobius";
@@ -163,6 +172,8 @@ void buildResource() {
     nCube.configResource(2, "/"+CB_NAME, AE_NAME); // AE resource
 
     nCube.configResource(3, "/"+CB_NAME+"/"+AE_NAME, "gps"); // Container resource
+    nCube.configResource(3, "/"+CB_NAME+"/"+AE_NAME+"/gps", "latitude"); // Container resource
+    nCube.configResource(3, "/"+CB_NAME+"/"+AE_NAME+"/gps", "longitude"); // Container resource
     nCube.configResource(3, "/"+CB_NAME+"/"+AE_NAME, "pedometer"); // Container resource
     nCube.configResource(3, "/"+CB_NAME+"/"+AE_NAME, "lock"); // Container resource
 
@@ -170,6 +181,87 @@ void buildResource() {
 }
 
 // Period of generating sensor data
+void gpsGenProcess() {
+    while(Serial1.available())     // While there is data on the RX pin...
+    {
+        int c = Serial1.read();    // load the data into a variable...
+        if(gps.encode(c))      // if there is a new valid sentence...
+        {
+            gps.f_get_position(&latitude, &longitude);         // then grab the data.
+        }   
+    }
+}
+
+void latitudeGenProcess() {
+    unsigned long latitude_generate_currentMillis = millis();
+    if (latitude_generate_currentMillis - latitude_generate_previousMillis >= latitude_generate_interval) 
+    {
+        latitude_generate_previousMillis = latitude_generate_currentMillis;
+        latitude_generate_interval = base_generate_interval + (random(1000));
+        if (state == "create_cin")
+        {
+            String cnt = "gps/latitude";
+                  
+            char rqi[10];
+            rand_str(rqi, 8);
+            upload_q.ref[upload_q.push_idx] = "/"+CB_NAME+"/"+AE_NAME+"/"+cnt;
+            upload_q.con[upload_q.push_idx] = String(latitude,5);
+            upload_q.rqi[upload_q.push_idx] = String(rqi);
+            upload_q.push_idx++;
+            if(upload_q.push_idx >= QUEUE_SIZE)
+            {
+                upload_q.push_idx = 0;
+            }
+            if(upload_q.push_idx == upload_q.pop_idx)
+            {
+                upload_q.pop_idx++;
+                if(upload_q.pop_idx >= QUEUE_SIZE)
+                {
+                    upload_q.pop_idx = 0;
+                }
+            }
+            
+            Serial.println("pop : " + String(upload_q.pop_idx));
+            Serial.println("push : " + String(upload_q.push_idx));
+        }
+    }
+}
+
+void longitudeGenProcess() {
+    unsigned long longitude_generate_currentMillis = millis();
+    if (longitude_generate_currentMillis - longitude_generate_previousMillis >= longitude_generate_interval) 
+    {
+        longitude_generate_previousMillis = longitude_generate_currentMillis;
+        longitude_generate_interval = base_generate_interval + (random(1000));
+        if (state == "create_cin")
+        {
+            String cnt = "gps/longitude";
+
+            char rqi[10];
+            rand_str(rqi, 8);
+            upload_q.ref[upload_q.push_idx] = "/"+CB_NAME+"/"+AE_NAME+"/"+cnt;
+            upload_q.con[upload_q.push_idx] = String(longitude,5);
+            upload_q.rqi[upload_q.push_idx] = String(rqi);
+            upload_q.push_idx++;
+            if(upload_q.push_idx >= QUEUE_SIZE)
+            {
+                upload_q.push_idx = 0;
+            }
+            if(upload_q.push_idx == upload_q.pop_idx)
+            {
+                upload_q.pop_idx++;
+                if(upload_q.pop_idx >= QUEUE_SIZE)
+                {
+                    upload_q.pop_idx = 0;
+                }
+            }
+            
+            Serial.println("pop : " + String(upload_q.pop_idx));
+            Serial.println("push : " + String(upload_q.push_idx));
+        }
+    }
+}
+
 void pedometerGenProcess() {
     int pedometer_x_read = analogRead(pedometer_x_pin);
     int pedometer_y_read = analogRead(pedometer_y_pin);
@@ -179,9 +271,9 @@ void pedometerGenProcess() {
     int pedometer_y_ang = map(pedometer_y_read, pedometer_min_val, pedometer_max_val, -90, 90);
     int pedometer_z_ang = map(pedometer_z_read, pedometer_min_val, pedometer_max_val, -90, 90);
 
-    pedometer_x = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_z_ang) + PI);
-    pedometer_y = RAD_TO_DEG * (atan2(-pedometer_x_ang, -pedometer_z_ang) + PI);
-    pedometer_z = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_x_ang) + PI);
+    double pedometer_x = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_z_ang) + PI);
+    double pedometer_y = RAD_TO_DEG * (atan2(-pedometer_x_ang, -pedometer_z_ang) + PI);
+    double pedometer_z = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_x_ang) + PI);
 
     if (abs((pedometer_old_x - pedometer_x)) > 10 && abs((pedometer_old_y - pedometer_y)) > 10 && abs((pedometer_old_z - pedometer_z)) > 10)
     {
@@ -190,10 +282,10 @@ void pedometerGenProcess() {
 
     if (pedometer_moved == true)
     {
-        if ((millis() - pedometer_last_millis) > 300) // 0.3초 미만 간격으로 걸음이 추가되는 경우는 실제 걸음이 아니라 센서의 흔들림 및 노이즈일 가능성이 많음.
+        if ((millis() - pedometer_last_count_millis) > 300) // 0.3초 미만 간격으로 걸음이 추가되는 경우는 실제 걸음이 아니라 센서의 흔들림 및 노이즈일 가능성이 많음.
         {
             pedometer_count ++;
-            pedometer_last_millis = millis();
+            pedometer_last_count_millis = millis();
         }
     }
 
@@ -203,7 +295,9 @@ void pedometerGenProcess() {
 
     pedometer_moved = false;
 
-    Serial.println("pedometer_count: " + pedometer_count);
+    // Serial.println("pedometer_count: " + String(pedometer_count));
+
+    // delay(300);
 
     unsigned long pedometer_generate_currentMillis = millis();
     if (pedometer_generate_currentMillis - pedometer_generate_previousMillis >= pedometer_generate_interval) 
@@ -284,7 +378,8 @@ void setup() {
     // pinMode(ledPin, OUTPUT);
 
     //Initialize serial:
-    Serial.begin(9600);
+    Serial.begin(115200);
+    Serial1.begin(9600);
     //while(!Serial);
 
     noti_q.pop_idx = 0;
@@ -335,6 +430,9 @@ void loop() {
 
     // user defined loop
     notiProcess();
+    gpsGenProcess();
+    latitudeGenProcess();
+    longitudeGenProcess();
     pedometerGenProcess();
 }
 
