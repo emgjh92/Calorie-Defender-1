@@ -135,11 +135,12 @@ const int pedometer_z_pin = 2;
 int pedometer_min_val = 265;
 int pedometer_max_val = 402;
 
+
 int pedometer_old_x = 0;
 int pedometer_old_y = 0;
 int pedometer_old_z = 0;
 
-boolean pedometer_moved = false;
+// boolean pedometer_moved = false;
 
 unsigned long pedometer_last_count_millis = 0;
 unsigned long pedometer_count = 0;
@@ -150,7 +151,7 @@ int lock_pos = 0; // variable to store the servo position
 
 // Information of CSE as Mobius with MQTT
 const String FIRMWARE_VERSION = "1.0.0.0";
-String AE_NAME = "testkkk";
+String AE_NAME = "testkkk3";
 String AE_ID = "S" + AE_NAME;
 const String CSE_ID = "/Mobius2";
 const String CB_NAME = "Mobius";
@@ -266,39 +267,36 @@ void pedometerGenProcess() {
     int pedometer_x_read = analogRead(pedometer_x_pin);
     int pedometer_y_read = analogRead(pedometer_y_pin);
     int pedometer_z_read = analogRead(pedometer_z_pin);
-
+    
     int pedometer_x_ang = map(pedometer_x_read, pedometer_min_val, pedometer_max_val, -90, 90);
     int pedometer_y_ang = map(pedometer_y_read, pedometer_min_val, pedometer_max_val, -90, 90);
     int pedometer_z_ang = map(pedometer_z_read, pedometer_min_val, pedometer_max_val, -90, 90);
-
+    
     double pedometer_x = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_z_ang) + PI);
     double pedometer_y = RAD_TO_DEG * (atan2(-pedometer_x_ang, -pedometer_z_ang) + PI);
     double pedometer_z = RAD_TO_DEG * (atan2(-pedometer_y_ang, -pedometer_x_ang) + PI);
+   
+    //int pedometer_dot =  pedometer_x_ang*pedometer_x_ang+pedometer_y_ang*pedometer_y_ang+pedometer_z_ang*pedometer_z_ang; //not use
 
-    if (abs((pedometer_old_x - pedometer_x)) > 10 && abs((pedometer_old_y - pedometer_y)) > 10 && abs((pedometer_old_z - pedometer_z)) > 10)
-    {
-        pedometer_moved = true;
-    }
-
-    if (pedometer_moved == true)
-    {
-        if ((millis() - pedometer_last_count_millis) > 300) // 0.3초 미만 간격으로 걸음이 추가되는 경우는 실제 걸음이 아니라 센서의 흔들림 및 노이즈일 가능성이 많음.
+        if(abs((pedometer_old_x - pedometer_x)) > 16 && abs((pedometer_old_y - pedometer_y)) > 16 && abs((pedometer_old_z - pedometer_z)) > 16)
         {
+            if((millis() - pedometer_last_count_millis) > 300)
+            {
             pedometer_count ++;
             pedometer_last_count_millis = millis();
-        }
-    }
+           
+          }
+       }
 
-    pedometer_old_x = pedometer_x;
-    pedometer_old_y = pedometer_y;
-    pedometer_old_z = pedometer_z;
-
+     
+   pedometer_old_x = pedometer_x;
+   pedometer_old_y = pedometer_y;
+   pedometer_old_z = pedometer_z;
+  /*
     pedometer_moved = false;
-
-    // Serial.println("pedometer_count: " + String(pedometer_count));
-
+   */
     // delay(300);
-
+  
     unsigned long pedometer_generate_currentMillis = millis();
     if (pedometer_generate_currentMillis - pedometer_generate_previousMillis >= pedometer_generate_interval) 
     {
@@ -408,7 +406,7 @@ void setup() {
     String topic = "/oneM2M/resp/" + AE_ID + CSE_ID + "/json";
     topic.toCharArray(resp_topic, 64);
 
-	  topic = "/oneM2M/req" + CSE_ID + "/" + AE_ID + "/json";
+    topic = "/oneM2M/req" + CSE_ID + "/" + AE_ID + "/json";
     topic.toCharArray(noti_topic, 64);
 
     nCube.Init(CSE_ID, MOBIUS_MQTT_BROKER_IP, AE_ID);
@@ -659,15 +657,15 @@ void publisher() {
             body_str = nCube.createAE(mqtt, req_id, 0, "3.14");
 
             if (body_str == "0") {
-        		Serial.println(F("REQUEST Failed"));
-        	}
-        	else {
-        		Serial.print("Request [");
-        		Serial.print(nCube.getReqTopic());
-        		Serial.print("] ----> ");
-        		Serial.println(body_str.length()+1);
-        		Serial.println(body_str);
-        	}
+            Serial.println(F("REQUEST Failed"));
+          }
+          else {
+            Serial.print("Request [");
+            Serial.print(nCube.getReqTopic());
+            Serial.print("] ----> ");
+            Serial.println(body_str.length()+1);
+            Serial.println(body_str);
+          }
             //digitalWrite(ledPin, HIGH);
         }
         else if (state == "create_cnt") {
@@ -678,15 +676,15 @@ void publisher() {
             nCube_State = NCUBE_REQUESTING;
             body_str = nCube.createCnt(mqtt, req_id, sequence);
             if (body_str == "0") {
-        		Serial.println(F("REQUEST Failed"));
-        	}
-        	else {
-        		Serial.print("Request [");
-        		Serial.print(nCube.getReqTopic());
-        		Serial.print("] ----> ");
-        		Serial.println(body_str.length()+1);
-        		Serial.println(body_str);
-        	}
+            Serial.println(F("REQUEST Failed"));
+          }
+          else {
+            Serial.print("Request [");
+            Serial.print(nCube.getReqTopic());
+            Serial.print("] ----> ");
+            Serial.println(body_str.length()+1);
+            Serial.println(body_str);
+          }
             //digitalWrite(ledPin, HIGH);
         }
         else if (state == "delete_sub") {
@@ -697,15 +695,15 @@ void publisher() {
             nCube_State = NCUBE_REQUESTING;
             body_str = nCube.deleteSub(mqtt, req_id, sequence);
             if (body_str == "0") {
-        		Serial.println(F("REQUEST Failed"));
-        	}
-        	else {
-        		Serial.print("Request [");
-        		Serial.print(nCube.getReqTopic());
-        		Serial.print("] ----> ");
-        		Serial.println(body_str.length()+1);
-        		Serial.println(body_str);
-        	}
+            Serial.println(F("REQUEST Failed"));
+          }
+          else {
+            Serial.print("Request [");
+            Serial.print(nCube.getReqTopic());
+            Serial.print("] ----> ");
+            Serial.println(body_str.length()+1);
+            Serial.println(body_str);
+          }
             //digitalWrite(ledPin, HIGH);
         }
         else if (state == "create_sub") {
@@ -716,15 +714,15 @@ void publisher() {
             nCube_State = NCUBE_REQUESTING;
             body_str = nCube.createSub(mqtt, req_id, sequence);
             if (body_str == "0") {
-        		Serial.println(F("REQUEST Failed"));
-        	}
-        	else {
-        		Serial.print("Request [");
-        		Serial.print(nCube.getReqTopic());
-        		Serial.print("] ----> ");
-        		Serial.println(body_str.length()+1);
-        		Serial.println(body_str);
-        	}
+            Serial.println(F("REQUEST Failed"));
+          }
+          else {
+            Serial.print("Request [");
+            Serial.print(nCube.getReqTopic());
+            Serial.print("] ----> ");
+            Serial.println(body_str.length()+1);
+            Serial.println(body_str);
+          }
             //digitalWrite(ledPin, HIGH);
         }
         else if (state == "create_cin") {
@@ -771,7 +769,6 @@ void chkState() {
             chk_count++;
             if(chk_count >= 100) {
                 chk_count = 0;
-
                 //noInterrupts();
                 body_str = nCube.heartbeat(mqtt);
                 // char seq[10];
@@ -779,7 +776,6 @@ void chkState() {
                 // mqtt.publish("/nCube/count/test", seq, strlen(seq));
                 // Serial.println(String(mqtt_sequence));
                 //interrupts();
-
                 if (body_str == "Failed") {
                     Serial.println(F("Heartbeat Failed"));
                 }
@@ -1059,16 +1055,16 @@ void uploadProcess() {
             wifiClient.flush();
             //interrupts();
             if (body_str == "0") {
-        		Serial.println(F("REQUEST Failed"));
-        	}
-        	else {
+            Serial.println(F("REQUEST Failed"));
+          }
+          else {
                 system_watchdog = 0;
-        		Serial.print("Request [");
-        		Serial.print(nCube.getReqTopic());
-        		Serial.print("] ----> ");
-        		Serial.println(body_str.length()+1);
-        		Serial.println(body_str);
-        	}
+            Serial.print("Request [");
+            Serial.print(nCube.getReqTopic());
+            Serial.print("] ----> ");
+            Serial.println(body_str.length()+1);
+            Serial.println(body_str);
+          }
             //digitalWrite(ledPin, HIGH);
         }
     }
