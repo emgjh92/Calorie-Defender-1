@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:id="@+id/linearLayoutMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        tools:ignore="UselessParent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnMain"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:layout_gravity="center_horizontal|start"
+                android:layout_weight="1"
+                android:text="@string/btn_main"/>
+
+            <Button
+                android:id="@+id/btnGpsSet"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:layout_gravity="center_horizontal|start"
+                android:layout_weight="1"
+                android:text="@string/btn_gps_set"/>
+
+            <Button
+                android:id="@+id/btnState"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:layout_gravity="center_horizontal|start"
+                android:layout_weight="1"
+                android:text="@string/btn_state"/>
+
+            <Button
+                android:id="@+id/btnPedometer"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:layout_gravity="center_horizontal|start"
+                android:layout_weight="1"
+                android:text="@string/btn_pedometer"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linearLayoutText"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="16">
+
+            <ListView
+                android:id="@+id/listViewAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="2">
+
+            <Button
+                android:id="@+id/btnDelete"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ffffff"
+                android:layout_gravity="center_horizontal|start"
+                android:text="@string/btn_delete"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name" translatable="false">Calorie Defender</string>
+    <string name="textview_about" translatable="false">Calorie Defender</string>
+
+    <string name="btn_refresh">새로고침</string>
+    <string name="btn_enrollment">등록</string>
+
+    <string name="btn_delete">삭제</string>
+
+    <string name="btn_lock">잠금 해제 시도</string>
+    <string name="btn_unlock">잠금 해제 상태</string>
+
+    <string name="btn_main">메인</string>
+    <string name="btn_gps_set">위치 지정</string>
+    <string name="btn_state">등록 정보</string>
+    <string name="btn_pedometer">걸음 수</string>
+    
+    <string name="edit_text_height">키: </string>
+    <string name="edit_text_weight">몸무게: </string>
+</resources>
