@@ -14,22 +14,20 @@ Calorie Defender는 다이어트의 실패 원인 중 가장 큰 부분을 차�
   - [1. Pinout](#1-pinout)
 
 ## Overview
-Calorie Defender는 다음과 같이 구성된다.
+Calorie Defender는 다음과 같이 구성되며 Calorie Defender를 만들기 위해 사용된 장치들에 대한 내용은 Components에서 확인할 수 있다.
 
 <p align="center"><img src="https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender%20Overview.png?raw=true"></p>
 
 ## Components
-Calorie Defender의 장치는 다음과 같이 구성된다.
+Calorie Defender의 장치는 다음과 같이 구성되며 각 장치의 Pinout은 How to use 의 1번에 설명되어 있다.
 
 <p align="center"><img src="https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender%20Components.png?raw=true"></p>
-
-각 장치의 Pinout은 How to use 의 1번에 설명되어 있다.
 
 ## How to use
 
 ### 1. Pinout
 
-먼저 장치를 이용해 다음과 같이 연결한다.
+먼저 각 장치를 다음과 같이 연결한다.
 
 <p align="center"><img src="https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender%20Pinout.png?raw=true" width=500></p>
 
