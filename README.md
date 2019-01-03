@@ -1,7 +1,7 @@
 # Calorie-Defender
 동영상 및 설명 .....
 
-[![]()](https://youtu.be/EwuzXSwv0OY)
+[![Calorie Defender](https://img.youtube.com/vi/EwuzXSwv0OY/0.jpg)](https://www.youtube.com/watch?v=EwuzXSwv0OY)
 
 ## 목차
 
