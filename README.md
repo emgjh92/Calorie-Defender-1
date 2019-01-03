@@ -30,7 +30,7 @@ Calorie Defender의 장치는 다음과 같이 구성된다.
 
 먼저 장치를 이용해 다음과 같이 연결한다.
 
-<image src = "https://github.com/awakening95/Calorie-Defender/blob/master/images/Calorie-Defender_pinout.png" width=500>
+<image src="https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender%20Pinout.png?raw=true" width=500 align="center">
 
 | **MPU-6050 (Gyro Sensor)** | **SG -90 (Servo Motor)** | **Adafruit Ultimate GPS Breakout:ada-746 (GPS Module)** |
 | :--------: | :--------: | :--------: |
