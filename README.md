@@ -1,7 +1,7 @@
 # Calorie Defender
 Calorie Defender는 ..... 설명
 
-[![Calorie Defender](https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender.gif?raw=true)
+![Calorie Defender](https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender.gif?raw=true)
 
 ## 목차
 
