@@ -1,7 +1,7 @@
-# Calorie-Defender
-동영상 및 설명 .....
+# Calorie Defender
+Calorie Defender는 ..... 설명
 
-[![Calorie Defender](https://img.youtube.com/vi/EwuzXSwv0OY/0.jpg)](https://www.youtube.com/watch?v=EwuzXSwv0OY)
+[![Calorie Defender](https://github.com/awakening95/etc/blob/master/Calorie%20Defender/Calorie%20Defender.gif?raw=true)
 
 ## 목차
 
@@ -14,6 +14,7 @@
     
     
 ## 구조
+## 
 ## 아두이노
 ## nQube
 ## 안드로이드
