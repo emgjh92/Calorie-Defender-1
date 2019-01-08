@@ -12,9 +12,9 @@ Calorie Defender는 다이어트의 실패 원인 중 가장 큰 부분을 차�
 - [Components](#components)
 - [How to use](#how-to-use)
   - [1. Pinout](#1-pinout)
-  - [2. Arduino upload](#2-arduinoupload)
-  - [3. WiFi 연결 및 서버의 데이터 저장 확인](#3-WiFi연결및서버의데이터저장확인)
-  - [4. 안드로이드 컴파일](#4-안드로이드컴파일)
+  - [2. Arduino upload](#2-arduino-upload)
+  - [3. WiFi 연결 및 서버의 데이터 저장 확인](#3--연결-및-서버의-데이터-저장-확인)
+  - [4. 안드로이드 컴파일](#4-안드로이드-컴파일)
   - [5. 실행](#5-실행)
 
 ## Overview
