@@ -101,12 +101,14 @@ public class State extends AppCompatActivity implements Button.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMain: {
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
                 break;
             }
             case R.id.btnGpsSet: {
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), GPSSet.class);
                 startActivity(intent);
                 finish();
@@ -116,6 +118,7 @@ public class State extends AppCompatActivity implements Button.OnClickListener {
                 break;
             }
             case R.id.btnPedometer: {
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), Pedometer.class);
                 startActivity(intent);
                 finish();
@@ -157,8 +160,7 @@ public class State extends AppCompatActivity implements Button.OnClickListener {
                                     listView.clearChoices();
                                     adapter.notifyDataSetChanged();
 
-                                    /* 전역변수 MainActivity.real_latitude_array, MainActivity.real_longitude_array에 변경된 내용으로 적용 */
-                                    // MainActivity.real_count--;
+                                    MainActivity.real_count--;
 
                                     cursor = db.rawQuery("select * from location", null);
                                     cursor.moveToFirst();

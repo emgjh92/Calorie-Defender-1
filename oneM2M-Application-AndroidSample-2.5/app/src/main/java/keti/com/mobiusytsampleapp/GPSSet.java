@@ -156,6 +156,7 @@ public class GPSSet extends AppCompatActivity implements Button.OnClickListener,
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btnMain : {
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
                 finish();
@@ -165,12 +166,14 @@ public class GPSSet extends AppCompatActivity implements Button.OnClickListener,
                 break;
             }
             case R.id.btnState: {
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), State.class);
                 startActivity(intent);
                 finish();
                 break;
             }
             case R.id.btnPedometer: {
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), Pedometer.class);
                 startActivity(intent);
                 finish();
@@ -179,6 +182,7 @@ public class GPSSet extends AppCompatActivity implements Button.OnClickListener,
             case R.id.btnRefresh: {
                 MainActivity.temp_count = 0;
 
+                db.close();
                 Intent intent = new Intent(getApplicationContext(), GPSSet.class);
                 startActivity(intent);
                 finish();
@@ -260,6 +264,7 @@ public class GPSSet extends AppCompatActivity implements Button.OnClickListener,
 
                         Toast.makeText(GPSSet.this,"등록되었습니다.",Toast.LENGTH_LONG).show();
 
+                        db.close();
                         Intent intent = new Intent(getApplicationContext(), GPSSet.class);
                         startActivity(intent);
                         finish();
