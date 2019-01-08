@@ -46,7 +46,7 @@ Calorie Defender의 장치는 다음과 같이 구성되며 각 장치의 Pinout
 
 ### 2. Arduino upload
 
-nCube 폴더의 nCube.ino 파일을 열고 154 Line에 있는 AE_NAME을 자신이 원하는 AE_NAME으로 변경한다.
+nCube 폴더의 nCube.ino 파일을 열고 154 Line에 있는 "Calorie_Defender" 자신이 원하는 AE_NAME으로 변경한다.
 
 <p align="center"><img src="https://user-images.githubusercontent.com/39123255/50833834-d8364180-1395-11e9-82aa-2c9252492a95.png" width=500></p>
 
