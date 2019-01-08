@@ -151,7 +151,7 @@ int lock_pos = 0; // variable to store the servo position
 
 // Information of CSE as Mobius with MQTT
 const String FIRMWARE_VERSION = "1.0.0.0";
-String AE_NAME = "testkkk3";
+String AE_NAME = "Calorie_Defender"; // Change AE_NAME to you want
 String AE_ID = "S" + AE_NAME;
 const String CSE_ID = "/Mobius2";
 const String CB_NAME = "Mobius";
