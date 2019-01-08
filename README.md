@@ -12,6 +12,10 @@ Calorie Defender는 다이어트의 실패 원인 중 가장 큰 부분을 차�
 - [Components](#components)
 - [How to use](#how-to-use)
   - [1. Pinout](#1-pinout)
+  - [2. Arduino upload](#2-arduinoupload)
+  - [3. WiFi 연결 및 서버의 데이터 저장 확인](#3-WiFi연결및서버의데이터저장확인)
+  - [4. 안드로이드 컴파일](#4-안드로이드컴파일)
+  - [5. 실행](#5-실행)
 
 ## Overview
 Calorie Defender는 다음과 같이 구성되며 Calorie Defender를 만들기 위해 사용된 장치들에 대한 내용은 Components에서 확인할 수 있다.
@@ -70,9 +74,25 @@ nCube 폴더의 nCube.ino 파일을 열고 154 Line에 있는 AE_NAME을 자신�
 
 <p align="center"><img src="https://user-images.githubusercontent.com/39123255/50836042-96a89500-139b-11e9-973c-3b305ae41087.png" width=750></p>
 
-### 4. 안드로이드 컴파일
+### 4. 안드로이드 빌드 APK
 
-이제 Calorie Defender의 잠금해제 및 특정 위치 지정과 삭제 그리고 Mobius 서버에 저장된 데이터를 활용하여 데이터를 시각화하기 위한 어플리케이션을 
+이제 안드로이드 스마트폰에서 Calorie Defender를 제어하고 Calorie Defender에서 제공하는 정보를 보기 위해 oneM2M-Application-AndroidSample-2.5를 APK 파일로 만든다.
+
+만들기 전에 MainActivity 44 Line와 115 Line의 "Calorie_Defender" 대신 How to use 2번의 nCube.ino에서 AE_NAME에 자신이 입력한 것을 입력한다.
+
+<p align="center"><img src="https://user-images.githubusercontent.com/39123255/50838091-8fd05100-13a0-11e9-82e0-f97021be5042.png" width=500></p>
+
+<p align="center"><img src="https://user-images.githubusercontent.com/39123255/50838149-b1313d00-13a0-11e9-960f-e13b5f4a28cf.png" width=500></p>
+
+그리고 AndroidManifest.xml의 17 Line의 "INPUT YOUR API KEY"에 자신의 Maps SDK for Android(Google Maps) API key를 입력한다.([이 사이트](https://webnautes.tistory.com/647)가 Maps SDK for Android API key를 얻는 방법에 대해 잘 나와있다.)
+
+<p align="center"><img src="https://user-images.githubusercontent.com/39123255/50838510-84315a00-13a1-11e9-8dfd-cdc2a0f88d48.png" width=500></p>
+
+이제 Bulid → Bulid Bundle(s) / APK(s) → Bulid APK(s)를 클릭하면 APK 파일을 생성하며 생성이 완료된 후 오른쪽 하단에 메시지 창이 뜬다. 이 때 메시지 창 내의 locate를 클릭하면 APK 파일이 생성된 곳으로 바로 이동할 수 있다. 이제 이 APK 파일을 안드로이드 스마트폰에 옮겨 사용하면 된다. 
+
+<p align="center"><img src="https://user-images.githubusercontent.com/39123255/50839307-5e0cb980-13a3-11e9-9be0-1686dd9a69fe.png" width=500></p>
+
+<p align="center"><img src="https://user-images.githubusercontent.com/39123255/50839376-8399c300-13a3-11e9-9346-deece7bf3feb.png" width=500></p>
 
 Calorie Defender.apk를 그대로 사용할 수 있으나 이 경우 AE_NAME을 Calorie_Defender로 두어야하며 다른 사용자와 동시에 사용시 데이터가 겹칠 수 있는 문제점이 있다.
 
